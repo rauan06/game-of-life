@@ -1,6 +1,8 @@
 package io
 
-import "errors"
+import (
+	"errors"
+)
 
 func InputHandler() (int, error) {
 	return 0, errors.New("")
