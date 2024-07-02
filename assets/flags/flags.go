@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func FlagHandler() map[string]string{
+func FlagHandler() map[string]string {
 	var err error
 	var flagMap map[string]string
 	args := os.Args[1:]
@@ -22,11 +22,11 @@ func FlagHandler() map[string]string{
 			io.Help()
 			os.Exit(0)
 		}
-		flagMap, err = flagsHandler(args)
+	}
+	flagMap, err = flagsHandler(args)
 
-		if err != nil {
-			log.Fatal(err)
-		}
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	return flagMap

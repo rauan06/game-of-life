@@ -16,3 +16,7 @@ Options:
   --footprints  : Add traces of visited cells, displayed as '∘'
   --colored     : Add color to live cells and traces if footprints are enabled`)
 }
+
+func Show(rules map[string]string, grid [][]int) {
+
+}

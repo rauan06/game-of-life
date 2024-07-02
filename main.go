@@ -1,16 +1,21 @@
 package main
 
 import (
-	"fmt"
 	"game/assets/flags"
+	"game/io"
+	"game/logic"
 )
 
 func main() {
-	// Flags handler
+	// Flags handler: flagsMap -> map[string]string
 	flagMap := flags.FlagHandler()
-	fmt.Println(flagMap)
 
-	// Input handler
+	// Input handler: grid -> [][]int
+	grid := io.MaintainInput(flagMap)
 
-	// Infinite for loop
+	// Infinite "for" loop
+	for {
+		io.Show(flagMap, grid)
+		grid = logic.NextGeneration(grid)
+	}
 }
