@@ -3,11 +3,36 @@ package flags
 import (
 	"errors"
 	"fmt"
+	"game/io"
+	"log"
+	"os"
 	"strconv"
 	"strings"
 )
 
-func FlagHandler(flags []string) (map[string]string, error) {
+func FlagHandler() map[string]string{
+	var err error
+	var flagMap map[string]string
+	args := os.Args[1:]
+	if len(args) != 0 {
+		if args[0] == "--help" {
+			if len(args) != 1 {
+				log.Fatal("unexpected flag after --help")
+			}
+			io.Help()
+			os.Exit(0)
+		}
+		flagMap, err = flagsHandler(args)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return flagMap
+}
+
+func flagsHandler(flags []string) (map[string]string, error) {
 	options := map[string]string{
 		"verbose":      "false",
 		"delay-ms":     "3000",
