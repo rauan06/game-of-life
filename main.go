@@ -21,7 +21,12 @@ func main() {
 		tick++
 		io.Show(flagMap, grid, tick)
 		logic.CheckState(grid)
-		grid = logic.NextGeneration(grid, len(grid), len(grid[0]))
+		grid = logic.NextGeneration(
+			grid,
+			len(grid),
+			len(grid[0]),
+			flagMap["edges-portal"].(bool),
+		)
 		time.Sleep(time.Millisecond * time.Duration(sleepTime))
 	}
 }

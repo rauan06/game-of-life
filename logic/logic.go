@@ -1,6 +1,6 @@
 package logic
 
-func NextGeneration(grid [][]int, h int, w int) [][]int {
+func NextGeneration(grid [][]int, h int, w int, edge bool) [][]int {
 	future := make([][]int, h)
 	for i := range future {
 		future[i] = make([]int, w)
@@ -17,9 +17,18 @@ func NextGeneration(grid [][]int, h int, w int) [][]int {
 					if di == 0 && dj == 0 {
 						continue
 					}
-					// Check boundaries
-					if (i+di >= 0 && i+di < h) && (j+dj >= 0 && j+dj < w) {
-						aliveNeighbours += grid[i+di][j+dj]
+
+					if !edge {
+						// Check boundaries
+						if (i+di >= 0 && i+di < h) && (j+dj >= 0 && j+dj < w) {
+							aliveNeighbours += grid[i+di][j+dj]
+						}
+					} else {
+						ni := (i + di + h) % h
+						nj := (j + dj + w) % w
+
+						// Add the neighbor's state to the count of alive neighbors
+						aliveNeighbours += grid[ni][nj]
 					}
 				}
 			}

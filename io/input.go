@@ -78,17 +78,24 @@ func readGrid(h, w int) [][]int {
 
 		if len([]rune(line)) == w {
 			arr := []int{}
+			ok := true
 
 			for _, r := range line {
 				if r == '.' {
 					arr = append(arr, 0)
-				} else {
+				} else if r == '#' {
 					arr = append(arr, 1)
+				} else {
+					ok = false
+					fmt.Println("Invalid symbol, please try again")
+					break
 				}
 			}
 
-			grid[counter-1] = arr
-			counter++
+			if ok {
+				grid[counter-1] = arr
+				counter++
+			}
 		} else {
 			fmt.Println("Invalid line length, please try again")
 			continue
