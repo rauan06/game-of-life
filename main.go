@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	// Flags handler: flagsMap -> map[string]string
+	// Flags handler: flagsMap -> map[string]interface{}
 	flagMap := flags.FlagHandler()
 	sleepTime := flagMap["delay-ms"].(int)
 
