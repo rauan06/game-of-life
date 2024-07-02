@@ -17,6 +17,6 @@ Options:
   --colored     : Add color to live cells and traces if footprints are enabled`)
 }
 
-func Show(rules map[string]string, grid [][]int) {
+func Show(rules map[string]interface{}, grid [][]int) {
 
 }

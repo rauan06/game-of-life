@@ -10,9 +10,9 @@ import (
 	"strings"
 )
 
-func FlagHandler() map[string]string {
+func FlagHandler() map[string]interface{} {
 	var err error
-	var flagMap map[string]string
+	var flagMap map[string]interface{}
 	args := os.Args[1:]
 	if len(args) != 0 {
 		if args[0] == "--help" {
@@ -32,16 +32,16 @@ func FlagHandler() map[string]string {
 	return flagMap
 }
 
-func flagsHandler(flags []string) (map[string]string, error) {
-	options := map[string]string{
-		"verbose":      "false",
-		"delay-ms":     "3000",
-		"file":         "false",
-		"edges-portal": "false",
-		"random":       "false",
-		"fullscreen":   "false",
-		"forprints":    "false",
-		"colored":      "false",
+func flagsHandler(flags []string) (map[string]interface{}, error) {
+	options := map[string]interface{}{
+		"verbose":      false,
+		"delay-ms":     2500,
+		"file":         false,
+		"edges-portal": false,
+		"random":       false,
+		"fullscreen":   false,
+		"forprints":    false,
+		"colored":      false,
 	}
 
 	for _, flag := range flags {
@@ -55,13 +55,13 @@ func flagsHandler(flags []string) (map[string]string, error) {
 			if err != nil {
 				return nil, err
 			}
-			options[newKey] = strconv.Itoa(number)
+			options[newKey] = number
 		} else if strings.HasPrefix(flag, "--random=") {
 			newKey, h, w, err := numericValue(flag)
 			if err != nil {
 				return nil, err
 			}
-			options[newKey] = strconv.Itoa(h) + "x" + strconv.Itoa(w)
+			options[newKey] = []int{h, w}
 		} else if strings.HasPrefix(flag, "--file=") {
 			filename := strings.SplitN(flag, "=", 2)
 			if len(filename[1]) == 0 {

@@ -1,12 +1,13 @@
 package io
 
 import (
+	"fmt"
 	"game/assets"
 	"log"
 )
 
-func MaintainInput(flagsMap map[string]string) [][]int {
-	if flagsMap["random"] == "false" {
+func MaintainInput(flagsMap map[string]interface{}) [][]int {
+	if flagsMap["random"] == false {
 		temp, err := InputHandler()
 
 		if err != nil {
@@ -19,5 +20,9 @@ func MaintainInput(flagsMap map[string]string) [][]int {
 }
 
 func InputHandler() ([][]int, error) {
+	var w, h int
+	fmt.Print("Enter the size of the grid (width x height): ")
+	fmt.Scanf("%d %d", w, h)
+
 	return [][]int{}, nil
 }
