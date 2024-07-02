@@ -2,35 +2,49 @@ package flags
 
 import (
 	"errors"
-	"log"
+	"fmt"
 	"strconv"
 	"strings"
 )
 
-func FlagHandler(flags []string) (map[string]int, error) {
-	options := map[string]int{}
+func FlagHandler(flags []string) (map[string]string, error) {
+	options := map[string]string{
+		"verbose":      "false",
+		"delay-ms":     "3000",
+		"file":         "false",
+		"edges-portal": "false",
+		"random":       "false",
+		"fullscreen":   "false",
+		"forprints":    "false",
+		"colored":      "false",
+	}
 
 	for _, flag := range flags {
 		key, err := validFlag(flag)
-
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
-		if options[key] == 1 {
-			log.Fatal(errors.New("repeated flags"))
-		}
-
-		if strings.HasPrefix(key, "delay-ms=") && strings.HasPrefix(key, "random=") {
-			key, number, err := numericValue(key)
-
+		if strings.HasPrefix(flag, "--delay-ms=") {
+			newKey, number, _, err := numericValue(flag)
 			if err != nil {
-				log.Fatal(err)
+				return nil, err
 			}
-
-			options[key] = number
+			options[newKey] = strconv.Itoa(number)
+		} else if strings.HasPrefix(flag, "--random=") {
+			newKey, h, w, err := numericValue(flag)
+			if err != nil {
+				return nil, err
+			}
+			options[newKey] = strconv.Itoa(h) + "x" + strconv.Itoa(w)
+		} else if strings.HasPrefix(flag, "--file=") {
+			filename := strings.SplitN(flag, "=", 2)
+			if len(filename[1]) == 0 {
+				return nil, errors.New("invalid value declaration in flag")
+			}
+			options["file"] = filename[1]
 		} else {
-			options[key] = 1
+			options[key] = "true"
 		}
 	}
 
@@ -40,32 +54,54 @@ func FlagHandler(flags []string) (map[string]int, error) {
 func validFlag(s string) (string, error) {
 	flags := []string{
 		"--verbose",
-		"--delay-ms=X",
-		"--file=X",
 		"--edges-portal",
-		"--random=WxH",
 		"--fullscreen",
 		"--forprints",
 		"--colored",
+		"--delay-ms=",
+		"--random=",
+		"--file=",
 	}
 
-	for _, r := range flags {
-		if s == r {
-			return r[2:], nil
+	for _, flag := range flags {
+		if s == flag {
+			return flag[2:], nil
+		} else if strings.HasPrefix(s, flag) {
+			return flag[2 : len(flag)-1], nil
 		}
 	}
 
 	return "", errors.New("invalid flag")
 }
 
-func numericValue(key string) (string, int, error) {
-	values := strings.Split(key, "=")
+func numericValue(key string) (string, int, int, error) {
+	values := strings.SplitN(key, "=", 2)
 
-	key = values[0]
-	number, err := strconv.Atoi(values[1])
-
-	if err != nil {
-		return "", 0, errors.New("unexpected string, while expecting int")
+	if len(values) != 2 {
+		return "", 0, 0, errors.New("invalid value declaration in flag")
 	}
-	return key, number, nil
+
+	key = values[0][2:] // Remove the leading "--"
+
+	if key == "random" {
+		dimensions := strings.SplitN(values[1], "x", 2)
+		if len(dimensions) != 2 {
+			return "", 0, 0, errors.New("invalid dimensions for random flag")
+		}
+		width, err := strconv.Atoi(dimensions[0])
+		if err != nil {
+			return "", 0, 0, fmt.Errorf("unexpected value for width, expecting int: %w", err)
+		}
+		height, err := strconv.Atoi(dimensions[1])
+		if err != nil {
+			return "", 0, 0, fmt.Errorf("unexpected value for height, expecting int: %w", err)
+		}
+		return key, width, height, nil
+	}
+
+	number, err := strconv.Atoi(values[1])
+	if err != nil {
+		return "", 0, 0, fmt.Errorf("unexpected value, expecting int: %w", err)
+	}
+	return key, number, 0, nil
 }

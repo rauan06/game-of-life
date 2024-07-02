@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"game/assets/flags"
 	"game/io"
 	"log"
@@ -9,6 +10,8 @@ import (
 
 func main() {
 	// Flags handler
+	flagMap := map[string]string{}
+	var err error
 	args := os.Args[1:]
 	if len(args) != 0 {
 		if args[0] == "--help" {
@@ -18,12 +21,13 @@ func main() {
 			io.Help()
 			os.Exit(0)
 		}
-		_, err := flags.FlagHandler(args)
+		flagMap, err = flags.FlagHandler(args)
 
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
+	fmt.Println(flagMap)
 
 	// Input handler
 
