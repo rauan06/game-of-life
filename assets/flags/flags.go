@@ -29,6 +29,10 @@ func FlagHandler() map[string]interface{} {
 		log.Fatal(err)
 	}
 
+	if flagMap["file"] != false && flagMap["random"] != false {
+		log.Fatal("--file= and --random=WxH cannot be executed at the same time")
+	}
+
 	return flagMap
 }
 
@@ -121,12 +125,21 @@ func numericValue(key string) (string, int, int, error) {
 		if err != nil {
 			return "", 0, 0, fmt.Errorf("unexpected value for height, expecting int: %w", err)
 		}
+		if height <= 0 {
+			return "", 0, 0, errors.New("height cannot be smaller or equal to 0")
+		}
+		if width <= 0 {
+			return "", 0, 0, errors.New("width cannot be smaller or equal to 0")
+		}
 		return key, width, height, nil
 	}
 
-	number, err := strconv.Atoi(values[1])
+	delay, err := strconv.Atoi(values[1])
 	if err != nil {
 		return "", 0, 0, fmt.Errorf("unexpected value, expecting int: %w", err)
 	}
-	return key, number, 0, nil
+	if delay <= 0 {
+		return "", 0, 0, errors.New("delay cannot be smaller or equal to 0")
+	}
+	return key, delay, 0, nil
 }
