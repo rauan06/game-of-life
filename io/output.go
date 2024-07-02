@@ -1,6 +1,9 @@
 package io
 
-import "fmt"
+import (
+	"fmt"
+	"game/assets"
+)
 
 func Help() {
 	fmt.Println(`Usage: go run main.go [options]
@@ -17,15 +20,19 @@ Options:
   --colored     : Add color to live cells and traces if footprints are enabled`)
 }
 
-func Show(rules map[string]interface{}, grid [][]int) {
+func Show(rules map[string]interface{}, grid [][]int, tick int) {
+	if rules["verbose"].(bool) {
+		verbose(tick, len(grid), len(grid[0]), assets.CountLiveCells(grid), rules["delay-ms"].(int))
+	}
+
 	fmt.Println()
 	for i := range grid {
 		for j := range grid[i] {
 			if grid[i][j] == 1 {
-        fmt.Print("x")
-      } else {
-        fmt.Print(".")
-      }
+				fmt.Print("x")
+			} else {
+				fmt.Print(".")
+			}
 
 			if j != len(grid[i])-1 {
 				fmt.Print(" ")
@@ -36,5 +43,14 @@ func Show(rules map[string]interface{}, grid [][]int) {
 		}
 	}
 
+	fmt.Println()
+}
+
+func verbose(tick, height, width, cells, delay int) {
+	fmt.Println()
+	fmt.Printf(`Tick: %d
+Grid Size: %dx%d
+Live Cells: %d
+DelayMs: %dms`, tick, height, width, cells, delay)
 	fmt.Println()
 }

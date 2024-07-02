@@ -16,8 +16,10 @@ func main() {
 	grid := io.MaintainInput(flagMap)
 
 	// Infinite "for" loop
+	tick := 0
 	for {
-		io.Show(flagMap, grid)
+		tick++
+		io.Show(flagMap, grid, tick)
 		logic.CheckState(grid)
 		grid = logic.NextGeneration(grid, len(grid), len(grid[0]))
 		time.Sleep(time.Millisecond * time.Duration(sleepTime))

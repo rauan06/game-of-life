@@ -73,7 +73,7 @@ func flagsHandler(flags []string) (map[string]interface{}, error) {
 			}
 			options["file"] = filename[1]
 		} else {
-			options[key] = "true"
+			options[key] = true
 		}
 	}
 

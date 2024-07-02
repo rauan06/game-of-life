@@ -17,7 +17,7 @@ func MaintainInput(flagsMap map[string]interface{}) [][]int {
 	if flagsMap["random"] == false {
 		return InputHandler()
 	}
-	return assets.RandomGrid(flagsMap["random"].([]int)[0], flagsMap["random"].([]int)[1])
+	return assets.RandomGrid(flagsMap["random"].([]int)[1], flagsMap["random"].([]int)[0])
 }
 
 func InputHandler() [][]int {

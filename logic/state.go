@@ -14,6 +14,7 @@ func CheckState(grid [][]int) {
 		}
 	}
 
+	fmt.Println()
 	fmt.Println("No live cell left")
 	os.Exit(0)
 }
