@@ -18,5 +18,23 @@ Options:
 }
 
 func Show(rules map[string]interface{}, grid [][]int) {
+	fmt.Println()
+	for i := range grid {
+		for j := range grid[i] {
+			if grid[i][j] == 1 {
+        fmt.Print("x")
+      } else {
+        fmt.Print(".")
+      }
 
+			if j != len(grid[i])-1 {
+				fmt.Print(" ")
+			}
+		}
+		if i != len(grid)-1 {
+			fmt.Println()
+		}
+	}
+
+	fmt.Println()
 }

@@ -7,6 +7,10 @@ import (
 )
 
 func MaintainInput(flagsMap map[string]interface{}) [][]int {
+	if flagsMap["file"] != false {
+		return assets.Reader(flagsMap["file"].(string))
+	}
+
 	if flagsMap["random"] == false {
 		temp, err := InputHandler()
 

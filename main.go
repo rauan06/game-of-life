@@ -18,7 +18,8 @@ func main() {
 	// Infinite "for" loop
 	for {
 		io.Show(flagMap, grid)
-		grid = logic.NextGeneration(grid)
+		logic.CheckState(grid)
+		grid = logic.NextGeneration(grid, len(grid), len(grid[0]))
 		time.Sleep(time.Millisecond * time.Duration(sleepTime))
 	}
 }
